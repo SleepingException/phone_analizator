@@ -6,7 +6,9 @@ import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
 
+
 public class Main {
+    final static int STARTNUM = 900;
     public static void main(String[] args) throws IOException {
         var data = initData();
         System.out.println(findNumber(args[0], data));
@@ -22,13 +24,13 @@ public class Main {
                         x[4] + x[5]))
                 .collect(Collectors.toList());
         List<List<PhoneNumber>> data = new ArrayList<>();
-        for(int i = 900; i < 1000; i++){
+        for(int i = 0; i < 100; i++){
             data.add(new ArrayList<>());
         }
         for(var elem : numbers){
-            data.get(elem.getPrefix()).add(elem);
+            data.get(elem.getPrefix()-STARTNUM).add(elem);
         }
-        for(int i = 900; i < 1000; i++){
+        for(int i = 0; i < data.size(); i++){
             data.get(i).sort(Comparator.comparingInt(PhoneNumber::getStart));
         }
         return data;
@@ -39,7 +41,7 @@ public class Main {
         }
         int prefix = Integer.parseInt(number.substring(0, 3));
         int num = Integer.parseInt(number.substring(3));
-        List<PhoneNumber> nums = (List) data.get(prefix);
+        List<PhoneNumber> nums = (List) data.get(prefix-STARTNUM);
         if(nums.size() == 0){
             return "This number does not belong to any operator";
         }

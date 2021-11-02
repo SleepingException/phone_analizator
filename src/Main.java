@@ -11,7 +11,7 @@ public class Main {
         var data = initData();
         System.out.println(findNumber(args[0], data));
     }
-    private static Map initData() throws IOException{
+    private static List initData() throws IOException{
         BufferedReader reader = new BufferedReader(new FileReader("phones.csv"));
         reader.readLine();
         List<PhoneNumber> numbers =  reader.lines()
@@ -21,19 +21,19 @@ public class Main {
                         Integer.parseInt(x[1]),
                         x[4] + x[5]))
                 .collect(Collectors.toList());
-        Map<Integer, List<PhoneNumber>> map = new HashMap();
+        List<List<PhoneNumber>> data = new ArrayList<>();
         for(int i = 900; i < 1000; i++){
-            map.put(i, new ArrayList<>());
+            data.add(new ArrayList<>());
         }
         for(var elem : numbers){
-            map.get(elem.getPrefix()).add(elem);
+            data.get(elem.getPrefix()).add(elem);
         }
         for(int i = 900; i < 1000; i++){
-            map.get(i).sort((n1, n2) -> (n1.getStart() < n2.getStart()) ? -1 : ((n1.getStart() == n2.getStart()) ? 0 : 1));
+            data.get(i).sort(Comparator.comparingInt(PhoneNumber::getStart));
         }
-        return map;
+        return data;
     }
-    private static String findNumber(String number, Map data) {
+    private static String findNumber(String number, List data) {
         if (number.length() != 10) {
             throw new IllegalArgumentException("Phone number must consist of 10 digits");
         }
